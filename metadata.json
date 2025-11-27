@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Voice Studio",
+  "description": "A high-fidelity text-to-speech application using Gemini's advanced audio generation capabilities. Generate lifelike speech from text with multiple voice options.",
+  "requestFramePermissions": []
+}
