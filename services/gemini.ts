@@ -1,18 +1,19 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 import { decodeBase64Audio, createAudioBlob } from '../utils/audioUtils';
 
-// Initialize Gemini Client
-// In a real app, you might handle the key differently.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-
 export const generateSpeech = async (
   text: string, 
   voiceName: string
 ): Promise<{ audioUrl: string; rawData: Uint8Array }> => {
   
-  if (!process.env.API_KEY) {
-    throw new Error("API Key is missing. Please set REACT_APP_GEMINI_API_KEY or similar in your environment.");
+  // Initialize the client at runtime to ensure process.env is fully loaded
+  const apiKey = process.env.API_KEY;
+
+  if (!apiKey) {
+    throw new Error("API Key is missing. Please ensure the 'API_KEY' environment variable is set in your deployment settings.");
   }
+
+  const ai = new GoogleGenAI({ apiKey });
 
   try {
     const response = await ai.models.generateContent({
