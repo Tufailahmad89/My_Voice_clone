@@ -138,16 +138,12 @@ const App: React.FC = () => {
             <div>
                 <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-400 flex items-center gap-3">
                     <Mic className="text-blue-500" />
-                    Gemini Voice Studio
+                    Voice clone
                 </h1>
-                <p className="text-slate-400 mt-2 max-w-lg">
-                    Generate lifelike speech using Google's Gemini 2.5 Flash model. 
-                    Clone your own voice or select a persona to bring your text to life.
-                </p>
+               
+               
             </div>
-            <div className="text-xs font-mono text-slate-500 bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">
-                Powered by gemini-2.5-flash-preview-tts
-            </div>
+           
         </header>
 
         <main className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -310,7 +306,7 @@ const App: React.FC = () => {
                                             <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <a 
                                                     href={clip.audioUrl} 
-                                                    download={`gemini-voice-${clip.id}.wav`}
+                                                    download={`my-voice${clip.id}.wav`}
                                                     onClick={(e) => e.stopPropagation()}
                                                     className="p-1.5 hover:bg-slate-700 rounded text-slate-400 hover:text-blue-400"
                                                     title="Download"
