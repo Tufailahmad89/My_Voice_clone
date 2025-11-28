@@ -23,9 +23,9 @@ export enum GenerationStatus {
 }
 
 export const AVAILABLE_VOICES: VoiceOption[] = [
-  { id: 'Kore', name: 'Kore', gender: 'Female', description: 'Warm and soothing' },
-  { id: 'Puck', name: 'Puck', gender: 'Male', description: 'Energetic and clear' },
-  { id: 'Charon', name: 'Charon', gender: 'Male', description: 'Deep and authoritative' },
-  { id: 'Fenrir', name: 'Fenrir', gender: 'Male', description: 'Rough and intense' },
-  { id: 'Zephyr', name: 'Zephyr', gender: 'Female', description: 'Soft and gentle' },
+  { id: 'Kore', name: 'Muzda', gender: 'Female', description: 'Warm and soothing' },
+  { id: 'Puck', name: 'Saad', gender: 'Male', description: 'Energetic and clear' },
+  { id: 'Charon', name: 'Ahmad', gender: 'Male', description: 'Deep and authoritative' },
+  { id: 'Fenrir', name: 'Nood', gender: 'Male', description: 'Rough and intense' },
+  { id: 'Zephyr', name: 'Naaz', gender: 'Female', description: 'Soft and gentle' },
 ];
