@@ -9,25 +9,29 @@ interface AudioVisualizerProps {
 
 export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, audioElementRef }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
-  const analyserRef = useRef<AnalyserNode>();
-  const audioContextRef = useRef<AudioContext>();
-  const sourceRef = useRef<MediaElementAudioSourceNode>();
+  const animationRef = useRef<number | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
 
   useEffect(() => {
     if (!audioElementRef.current || !canvasRef.current) return;
 
     if (!audioContextRef.current) {
       const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      audioContextRef.current = new AudioContextClass();
-      analyserRef.current = audioContextRef.current.createAnalyser();
-      analyserRef.current.fftSize = 256;
+      const audioCtx = new AudioContextClass();
+      audioContextRef.current = audioCtx;
+      
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      analyserRef.current = analyser;
       
       // Connect audio element to analyser
       try {
-        sourceRef.current = audioContextRef.current.createMediaElementSource(audioElementRef.current);
-        sourceRef.current.connect(analyserRef.current);
-        analyserRef.current.connect(audioContextRef.current.destination);
+        const source = audioCtx.createMediaElementSource(audioElementRef.current);
+        sourceRef.current = source;
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
       } catch (e) {
         // Source might already be connected if component remounts quickly
         console.warn("MediaElementSource connection error", e);
@@ -64,7 +68,13 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, aud
         ctx.fillStyle = gradient;
         // Rounded top bars
         ctx.beginPath();
-        ctx.roundRect(x, height - barHeight, barWidth, barHeight, [4, 4, 0, 0]);
+        
+        // Check for roundRect support
+        if ('roundRect' in ctx) {
+             (ctx as any).roundRect(x, height - barHeight, barWidth, barHeight, [4, 4, 0, 0]);
+        } else {
+             ctx.rect(x, height - barHeight, barWidth, barHeight);
+        }
         ctx.fill();
 
         x += barWidth + 1;
@@ -77,7 +87,9 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, aud
       }
       draw();
     } else {
-      cancelAnimationFrame(animationRef.current!);
+      if (animationRef.current !== null) {
+         cancelAnimationFrame(animationRef.current);
+      }
       // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       // Draw a flat line
@@ -86,7 +98,7 @@ export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ isPlaying, aud
     }
 
     return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
     };
   }, [isPlaying, audioElementRef]);
 
